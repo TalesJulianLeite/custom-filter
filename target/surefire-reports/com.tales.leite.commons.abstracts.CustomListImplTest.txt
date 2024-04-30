@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.tales.leite.commons.abstracts.CustomListImplTest
+-------------------------------------------------------------------------------
+Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.038 s -- in com.tales.leite.commons.abstracts.CustomListImplTest
