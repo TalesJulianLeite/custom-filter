@@ -1,55 +1,65 @@
 package com.tales.leite.commons.abstracts;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.powermock.api.mockito.PowerMockito.mock;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-@RunWith(MockitoJUnitRunner.class)
 public class CustomSpecificationTest {
 
-    @PersistenceContext
-    @Autowired
-    private EntityManager entityManager;
+
+    @Mock
+    private Root<String> root;
+    @Mock
+    private CriteriaQuery<?> query;
+    @Mock
+    private CriteriaBuilder builder;
 
     @BeforeEach
-    void setUp() {
-        if(this.entityManager == null) {
-            entityManager = new En
-        }
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
     }
 
     @Test
-    void testToPredicate() {
-        CustomSpecificationImpl<String> customSpecification = new CustomSpecificationImpl<>();
-        CriteriaBuilder builder = entityManager.getCriteriaBuilder();; // Fornecer um objeto CriteriaBuilder válido
-        CriteriaQuery<?> query = builder.createQuery(Object.class);; // Fornecer um objeto CriteriaQuery válido
-        Root<String> root = query.from(String.class);; // Fornecer um objeto Root válido
-        Predicate predicate = customSpecification.toPredicate(root, query, builder);
-        assertNotNull(predicate);
-        // Aqui você pode adicionar mais asserções conforme necessário
+    void toPredicate() {
+        Predicate mockPredicate01 = Mockito.mock(Predicate.class);
+        Predicate mockPredicate02 = Mockito.mock(Predicate.class);
+        List<Predicate> values = List.of(mockPredicate01, mockPredicate02);
+        new CustomSpecificationImpl(values).toPredicate(root, query, builder);
+        Mockito.verify(builder).and(new Predicate[] { mockPredicate01, mockPredicate02});
+        Mockito.verifyNoMoreInteractions(root, query, builder);
     }
 
-    // Implementação concreta de Specification para fins de teste
-    private static class CustomSpecificationImpl<T> extends CustomSpecification<T> {
+    @AllArgsConstructor
+    private class CustomSpecificationImpl extends CustomSpecification<String> {
+
+        private List<Predicate> values;
+
         @Override
-        protected List<Predicate> predicates(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
-            // Implemente lógica de geração de predicados de teste aqui, se necessário
-            return new ArrayList<>(); // Retorna uma lista vazia por enquanto
+        protected List<Predicate> predicates(Root<String> root,
+                                             CriteriaQuery<?> query,
+                                             CriteriaBuilder builder) {
+            return values;
         }
+
     }
 
 

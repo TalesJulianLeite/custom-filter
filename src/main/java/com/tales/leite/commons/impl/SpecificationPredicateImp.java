@@ -6,10 +6,16 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
+import lombok.Value;
+import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 
 import jakarta.persistence.criteria.*;
+import org.apache.commons.logging.Log;
+import org.hibernate.jpa.boot.spi.EntityManagerFactoryBuilder;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -17,7 +23,8 @@ import java.util.Objects;
 import java.util.function.Function;
 
 @Getter
-@Slf4j
+@Data
+@Builder
 public class SpecificationPredicateImp<I>
     extends CustomAbstractList<Predicate>
     implements SpecificationPredicate {
@@ -25,6 +32,7 @@ public class SpecificationPredicateImp<I>
   private final Root<I> root;
   private final CriteriaQuery<?> query;
   private final CriteriaBuilder builder;
+  private Log log;
 
   public SpecificationPredicateImp(Root<I> root,
       CriteriaQuery<?> query,
@@ -57,8 +65,9 @@ public class SpecificationPredicateImp<I>
     }
     Path<String> path = field(attributeName);
     if (ignoreCase) {
-      Expression<String> expression = getBuilder().lower(path);
-      String lowerCase = value.toLowerCase();
+      Expression<String> expression;
+        expression = getBuilder().lower(path);
+        String lowerCase = value.toLowerCase();
       return like(expression, "%" + lowerCase + "%");
     } else {
       return like(path, "%" + value + "%");
