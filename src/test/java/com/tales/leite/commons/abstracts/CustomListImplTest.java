@@ -3,7 +3,6 @@ package com.tales.leite.commons.abstracts;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -12,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CustomListImplTest {
+class CustomListImplTest {
 
     @Test
     void testSize() {

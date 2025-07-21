@@ -1,30 +1,18 @@
 package com.tales.leite.commons.abstracts;
 
-import jakarta.persistence.EntityManager;
 import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.powermock.api.mockito.PowerMockito.mock;
-
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class CustomSpecificationTest {
-
 
     @Mock
     private Root<String> root;

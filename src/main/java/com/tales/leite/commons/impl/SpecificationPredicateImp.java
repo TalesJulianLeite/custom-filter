@@ -9,13 +9,10 @@ import jakarta.persistence.criteria.Root;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
-import lombok.Value;
-import lombok.extern.log4j.Log4j2;
-import lombok.extern.slf4j.Slf4j;
 
 import jakarta.persistence.criteria.*;
-import org.apache.commons.logging.Log;
-import org.hibernate.jpa.boot.spi.EntityManagerFactoryBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -32,7 +29,8 @@ public class SpecificationPredicateImp<I>
   private final Root<I> root;
   private final CriteriaQuery<?> query;
   private final CriteriaBuilder builder;
-  private Log log;
+  private static final Logger log = LoggerFactory.getLogger(Object.class);
+  private static final String CASE_SENSITIVE_LOG = "Using ignore case-sensitive for comparing {} with {}";
 
   public SpecificationPredicateImp(Root<I> root,
       CriteriaQuery<?> query,
@@ -102,19 +100,19 @@ public class SpecificationPredicateImp<I>
     }
     Path<String> path = field(rootAttributeName);
     if (ignoreCase) {
-      log.info("Using ignore case-sensitive for comparing {} with {}", rootAttributeName, value);
+      log.info(CASE_SENSITIVE_LOG);
       Expression<String> expression = getBuilder().lower(path);
       String lowerCase = value.toLowerCase();
       return predicateEqual(expression, lowerCase);
     } else {
-      log.info("Using case-sensitive for comparing {} with {}", rootAttributeName, value);
+      log.info(CASE_SENSITIVE_LOG, rootAttributeName, value);
       return predicateEqual(path, value);
     }
   }
 
   @Override
   public Predicate predicateEqual(Expression<?> field, Object value) {
-    log.info("add equal specification for {} with value <{}>", field, value);
+    log.info("add equal specification for {} with value {}", field, value);
     return getBuilder().equal(field, value);
   }
 
