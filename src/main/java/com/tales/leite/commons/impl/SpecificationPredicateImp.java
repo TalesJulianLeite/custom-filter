@@ -11,6 +11,7 @@ import lombok.Data;
 import lombok.Getter;
 
 import jakarta.persistence.criteria.*;
+import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
@@ -19,8 +20,9 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.function.Function;
 
-@Getter
 @Data
+@Getter
+@Setter
 @Builder
 public class SpecificationPredicateImp<I>
     extends CustomAbstractList<Predicate>
@@ -29,7 +31,7 @@ public class SpecificationPredicateImp<I>
   private final Root<I> root;
   private final CriteriaQuery<?> query;
   private final CriteriaBuilder builder;
-  private static final Logger log = LoggerFactory.getLogger(Object.class);
+  private static final Logger log = LoggerFactory.getLogger(SpecificationPredicateImp.class);
   private static final String CASE_SENSITIVE_LOG = "Using ignore case-sensitive for comparing {} with {}";
 
   public SpecificationPredicateImp(Root<I> root,
@@ -153,7 +155,7 @@ public class SpecificationPredicateImp<I>
       String attributeName,
       T value,
       Function<T, Boolean> function) {
-    if (required && function.apply(value)) {
+    if (required && Boolean.TRUE.equals(function.apply(value))) {
       throw new IllegalArgumentException("Specification value for field " + attributeName + " is required");
     } else {
       return Objects.nonNull(value);
